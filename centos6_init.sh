@@ -17,7 +17,8 @@ PWD=$(pwd)
 #while true; do
 #    case "$1" in
 #        --aa)      aa=$2; shift 2;;
-#        -h|--help) usage; exit0;;
+#        -h|--help) usage; exit 0;;
+#        --)               break;;
 #    esac
 #done
 
