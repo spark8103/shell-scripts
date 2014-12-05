@@ -192,10 +192,12 @@ chkconfig netfs off
 
 yum makecache
 yum -y update
-yum install parted ntp wget traceroute telnet openssh-clients bind-utils lsof man mailx vim -y
+yum install parted ntp wget traceroute telnet openssh-clients bind-utils lsof man mailx vim git svn -y
 
 echo "*/30 * * * * /usr/sbin/ntpdate 192.168.100.61" >> /var/spool/cron/root
 chmod 600 /var/spool/cron/root
+
+echo "127.0.0.1   localhost" > /etc/hosts
 
 rm -rf /root/anaconda-ks.cfg
 rm -rf /root/install.log
