@@ -4,7 +4,7 @@
 #Last Modified:
 
 PWD=$(pwd)
-HOSTNAME="aaa"
+HOSTNAME=`hostname`
 IPADDR=`ip a | grep "global eth0" | awk '{print $2}' | awk -F "/" '{print $1}'`
 GATEWAY=`netstat -rn | grep UG | awk '{print $2}'`
 
@@ -30,7 +30,7 @@ sed -i -e "s/deploy-date/`stat /lost+found/ | grep Modify | awk '{print $2}'`/" 
 #Change hostname
 cat > /etc/sysconfig/network << "EOF"
 NETWORKING=yes
-HOSTNAME=hostname-all.test.dalegames.com
+HOSTNAME=hostname-all
 GATEWAY=gateway
 NOZEROCONF=yes
 EOF
@@ -40,7 +40,7 @@ sed -i -e "s/gateway/$GATEWAY/" /etc/sysconfig/network
 
 
 #Change eth0
-cat > cat /etc/sysconfig/network-scripts/ifcfg-eth0  << "EOF"
+cat > /etc/sysconfig/network-scripts/ifcfg-eth0  << "EOF"
 DEVICE=eth0
 TYPE=Ethernet
 ONBOOT=yes
@@ -123,8 +123,13 @@ enabled=0
 gpgkey=http://mirrors.aliyun.com/centos/RPM-GPG-KEY-CentOS-6
 EOF
 
-mv -f /etc/yum.repos.d/epel.repo /etc/yum.repos.d/epel.repo.backup
-mv -f /etc/yum.repos.d/epel-testing.repo /etc/yum.repos.d/epel-testing.repo.backup
+if [ -f /etc/yum.repos.d/epel.repo ]; then 
+  mv -f /etc/yum.repos.d/epel.repo /etc/yum.repos.d/epel.repo.backup
+fi
+
+if [ -f /etc/yum.repos.d/epel-testing.repo ]; then 
+  mv -f /etc/yum.repos.d/epel-testing.repo /etc/yum.repos.d/epel-testing.repo.backup
+fi
 
 cat > /etc/yum.repos.d/epel.repo << "EOF"
 [epel]

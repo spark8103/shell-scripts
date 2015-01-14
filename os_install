@@ -1,0 +1,43 @@
+lvcreate -n test-puppet-0-18 -L 50G /dev/vg
+koan --virt --server=10.100.0.10 --profile=virtual --virt-path=/dev/vg/test-puppet-0-18 --virt-name=test-puppet-0-18
+
+lvcreate -n test-mcollective-0-19 -L 50G /dev/vg
+koan --virt --server=10.100.0.10 --profile=virtual --virt-path=/dev/vg/test-mcollective-0-19 --virt-name=test-mcollective-0-19
+
+
+lvcreate -n test-docker-0-16 -L 100G /dev/vg
+virt-install --ram=4096 --vcpus=2 --os-type=linux --os-variant=rhel6 \
+         --cdrom /home/ISOs/CentOS-7.0-1406-x86_64-Minimal.iso --network bridge=br0 \
+         --disk path=/dev/vg/test-docker-0-16 \
+         --accelerate --vnc --vncport=5903 \
+         --noautoconsole --name=test-docker-0-16
+ 
+
+
+lvcreate -n test-docker-0-16 -L 100G /dev/vg
+virt-install --ram=4096 --vcpus=2 --os-type=linux --os-variant=rhel6 \
+         --cdrom /home/ISOs/CentOS-6.6-x86_64-minimal.iso --network bridge=br0 \
+         --disk path=/dev/vg/test-docker-0-16 \
+         --accelerate --vnc --vncport=5903 \
+         --noautoconsole --name=test-docker-0-16
+
+lvcreate -n test-docker-0-17 -L 100G /dev/vg
+virt-install --ram=4096 --vcpus=2 --os-type=linux --os-variant=rhel6 \
+         --cdrom /home/ISOs/CentOS-6.6-x86_64-minimal.iso --network bridge=br0 \
+         --disk path=/dev/vg/test-docker-0-17 \
+         --accelerate --vnc --vncport=5906 \
+         --noautoconsole --name=test-docker-0-17
+
+lvcreate -n test-docker-0-18 -L 100G /dev/vg
+virt-install --ram=4096 --vcpus=2 --os-type=linux --os-variant=rhel6 \
+         --cdrom /home/ISOs/CentOS-6.6-x86_64-minimal.iso --network bridge=br0 \
+         --disk path=/dev/vg/test-docker-0-18 \
+         --accelerate --vnc --vncport=5907 \
+         --noautoconsole --name=test-docker-0-18
+
+lvcreate -n test-docker-0-19 -L 100G /dev/vg
+virt-install --ram=4096 --vcpus=2 --os-type=linux --os-variant=rhel6 \
+         --cdrom /home/ISOs/CentOS-6.6-x86_64-minimal.iso --network bridge=br0 \
+         --disk path=/dev/vg/test-docker-0-19 \
+         --accelerate --vnc --vncport=5908 \
+         --noautoconsole --name=test-docker-0-19
