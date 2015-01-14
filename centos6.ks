@@ -16,7 +16,7 @@ timezone --utc Asia/Shanghai
 
 # Network Configuration===================================================Begin
 #network --device eth0 --bootproto dhcp --hostname localhost.idc.pplive.cn --onboot=yes --noipv6
-network --device eth0 --bootproto static --hostname test-0-13.test.dalegames.com --ip=10.100.0.13 --gateway=10.100.0.254 --netmask=255.255.255.0 --onboot=yes --noipv6
+network --onboot yes --device eth0 --mtu=1500 --bootproto static --ip 10.100.0.13 --netmask 255.255.255.0 --gateway 10.100.0.254 --noipv6 --hostname test-0-13.test.dalegames.com
 # Network Configuration===================================================End
 
 
@@ -31,8 +31,8 @@ reboot --eject
 
 # Disk/Partitioning Section===============================================Begin
 zerombr
-bootloader --location=mbr --driveorder=vda
-clearpart --all --initlabel --drives=vda
+bootloader --location=mbr --driveorder=vda --append="crashkernel=auto rhgb quiet"
+clearpart --all --drives=vda --initlabel
 part /boot --fstype=ext4 --asprimary --size=500
 part / --fstype=ext4 --asprimary --size=30720
 part swap --asprimary --size=4096
@@ -57,6 +57,7 @@ mailx
 svn
 git
 # Package Section=========================================================End
+%end
 
 
 # Postconfig Section
@@ -293,8 +294,37 @@ sed -i -e  's/crashkernel=auto/crashkernel=auto\ console=ttyS0,115200/' /boot/gr
 #Virtual server console setting===========================================End
 
 
+#Log Setting==============================================================Begin
+cat >> /etc/profile << "EOFFF"
+
+history
+USER_IP=`who -u am i 2>/dev/null| awk '{print $NF}'|sed -e 's/[()]//g'`
+if [ "$USER_IP" = "" ]
+then
+USER_IP=`hostname`
+fi
+if [ ! -d /var/history ]
+then
+mkdir -p /var/history
+chmod 777 /var/history
+fi
+if [ ! -d /var/history/${LOGNAME} ]
+then
+mkdir /var/history/${LOGNAME}
+chmod 300 /var/history/${LOGNAME}
+fi
+export HISTSIZE=10000
+DT=`date +"%Y%m%d_%H%M%S"`
+export HISTFILE="/var/history/${LOGNAME}/${USER_IP}_history.$DT"
+chmod 400 /var/history/${LOGNAME}/*history* 2>/dev/null
+chattr +i /var/history/${LOGNAME}/*history* 2>/dev/null
+EOFFF
+#Log Setting==============================================================End
+
+
+
 #NETWORK Setting==========================================================Begin
-Cat > /etc/sysconfig/network-scripts/ifcfg-eth0 << "EOF"
+cat > /etc/sysconfig/network-scripts/ifcfg-eth0 << "EOF"
 DEVICE=eth0
 TYPE=Ethernet
 ONBOOT=yes
@@ -305,16 +335,19 @@ IPV6INIT=no
 EOF
 #NETWORK Setting==========================================================End
 
+
 #Host Setting=============================================================Begin
 echo "127.0.0.1   localhost" > /etc/hosts
 #Host Setting=============================================================End
+
 
 #Other clean==============================================================Begin
 rm -rf /root/anaconda-ks.cfg
 rm -rf /root/install.log
 rm -rf /root/install.log.syslog
 #Other clean==============================================================End
-%end
 
+
+%end
 #Change log.
-#Created this kickstart file. spark8103 <spark8103@gmail.com>, 2015-01-13, Version: 0.1
+#Created this kickstart file. ChuanShuang Zhang <chuanshuang.zhang@dalegames.com>, 2015-01-13, Version: 0.1

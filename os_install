@@ -1,43 +1,54 @@
-lvcreate -n test-puppet-0-18 -L 50G /dev/vg
-koan --virt --server=10.100.0.10 --profile=virtual --virt-path=/dev/vg/test-puppet-0-18 --virt-name=test-puppet-0-18
-
-lvcreate -n test-mcollective-0-19 -L 50G /dev/vg
-koan --virt --server=10.100.0.10 --profile=virtual --virt-path=/dev/vg/test-mcollective-0-19 --virt-name=test-mcollective-0-19
+lvcreate -n test-0-18 -L 50G /dev/vg
+koan --virt --server=10.100.0.10 --profile=virtual --virt-path=/dev/vg/test-0-18 --virt-name=test-0-18
 
 
-lvcreate -n test-docker-0-16 -L 100G /dev/vg
+
+lvcreate -n test-0-20 -L 100G /dev/vg
 virt-install --ram=4096 --vcpus=2 --os-type=linux --os-variant=rhel6 \
          --cdrom /home/ISOs/CentOS-7.0-1406-x86_64-Minimal.iso --network bridge=br0 \
-         --disk path=/dev/vg/test-docker-0-16 \
-         --accelerate --vnc --vncport=5903 \
-         --noautoconsole --name=test-docker-0-16
+         --disk path=/dev/vg/test-0-20 \
+         --accelerate --vnc --vncport=5910 \
+         --noautoconsole --name=test-0-20
  
 
 
-lvcreate -n test-docker-0-16 -L 100G /dev/vg
+lvcreate -n test-0-11 -L 100G /dev/vg
 virt-install --ram=4096 --vcpus=2 --os-type=linux --os-variant=rhel6 \
          --cdrom /home/ISOs/CentOS-6.6-x86_64-minimal.iso --network bridge=br0 \
-         --disk path=/dev/vg/test-docker-0-16 \
+         --disk path=/dev/vg/test-0-11 \
          --accelerate --vnc --vncport=5903 \
-         --noautoconsole --name=test-docker-0-16
+         --noautoconsole --name=test-0-11
 
-lvcreate -n test-docker-0-17 -L 100G /dev/vg
-virt-install --ram=4096 --vcpus=2 --os-type=linux --os-variant=rhel6 \
-         --cdrom /home/ISOs/CentOS-6.6-x86_64-minimal.iso --network bridge=br0 \
-         --disk path=/dev/vg/test-docker-0-17 \
-         --accelerate --vnc --vncport=5906 \
-         --noautoconsole --name=test-docker-0-17
 
-lvcreate -n test-docker-0-18 -L 100G /dev/vg
-virt-install --ram=4096 --vcpus=2 --os-type=linux --os-variant=rhel6 \
-         --cdrom /home/ISOs/CentOS-6.6-x86_64-minimal.iso --network bridge=br0 \
-         --disk path=/dev/vg/test-docker-0-18 \
-         --accelerate --vnc --vncport=5907 \
-         --noautoconsole --name=test-docker-0-18
 
-lvcreate -n test-docker-0-19 -L 100G /dev/vg
+lvcreate -n test-0-13 -L 100G /dev/vg
 virt-install --ram=4096 --vcpus=2 --os-type=linux --os-variant=rhel6 \
-         --cdrom /home/ISOs/CentOS-6.6-x86_64-minimal.iso --network bridge=br0 \
-         --disk path=/dev/vg/test-docker-0-19 \
-         --accelerate --vnc --vncport=5908 \
-         --noautoconsole --name=test-docker-0-19
+         --location=http://10.100.0.10/centos6_repo/ --network bridge=br0 \
+                 -x "ip=10.100.0.13 netmask=255.255.255.0 gateway=10.100.0.254 \
+                 ks=http://10.100.0.10/centos6_repo/ks/test-0-13.ks ksdevice=eth0" \
+         --disk path=/dev/vg/test-0-13 --accelerate --vnc --vncport=5903 \
+         --noautoconsole --name=test-0-13
+
+lvcreate -n test-0-14 -L 100G /dev/vg
+virt-install --ram=4096 --vcpus=2 --os-type=linux --os-variant=rhel6 \
+         --location=http://10.100.0.10/centos6_repo/ --network bridge=br0 \
+                 -x "ip=10.100.0.14 netmask=255.255.255.0 gateway=10.100.0.254 \
+                 ks=http://10.100.0.10/centos6_repo/ks/test-0-14.ks ksdevice=eth0" \
+         --disk path=/dev/vg/test-0-14 --accelerate --vnc --vncport=5904 \
+         --noautoconsole --name=test-0-14
+
+lvcreate -n test-0-15 -L 100G /dev/vg
+virt-install --ram=4096 --vcpus=2 --os-type=linux --os-variant=rhel6 \
+         --location=http://10.100.0.10/centos6_repo/ --network bridge=br0 \
+                 -x "ip=10.100.0.15 netmask=255.255.255.0 gateway=10.100.0.254 \
+                 ks=http://10.100.0.10/centos6_repo/ks/test-0-15.ks ksdevice=eth0" \
+         --disk path=/dev/vg/test-0-15 --accelerate --vnc --vncport=5905 \
+         --noautoconsole --name=test-0-15
+
+lvcreate -n test-0-16 -L 100G /dev/vg
+virt-install --ram=4096 --vcpus=2 --os-type=linux --os-variant=rhel6 \
+         --location=http://10.100.0.10/centos6_repo/ --network bridge=br0 \
+                 -x "ip=10.100.0.16 netmask=255.255.255.0 gateway=10.100.0.254 \
+                 ks=http://10.100.0.10/centos6_repo/ks/test-0-16.ks ksdevice=eth0" \
+         --disk path=/dev/vg/test-0-16 --accelerate --vnc --vncport=5906 \
+         --noautoconsole --name=test-0-16
