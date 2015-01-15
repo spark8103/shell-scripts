@@ -60,6 +60,7 @@ git
 %end
 
 
+
 # Postconfig Section
 %post
 
@@ -254,6 +255,11 @@ sed -i -e '/exec/s/exec/#exec/' /etc/init/control-alt-delete.conf
 #disable ctrl alt del=====================================================End
 
 
+#SSH Setting==============================================================Begin
+sed -i -e 's/#ListenAddress 0.0.0.0/ListenAddress 0.0.0.0/' /etc/ssh/sshd_config
+#SSH Setting==============================================================End
+
+
 #Time update setting======================================================Begin
 echo "*/30 * * * * /usr/sbin/ntpdate 192.168.100.61" >> /var/spool/cron/root
 #Time update setting======================================================End
@@ -322,7 +328,6 @@ EOFFF
 #Log Setting==============================================================End
 
 
-
 #NETWORK Setting==========================================================Begin
 cat > /etc/sysconfig/network-scripts/ifcfg-eth0 << "EOF"
 DEVICE=eth0
@@ -346,6 +351,7 @@ rm -rf /root/anaconda-ks.cfg
 rm -rf /root/install.log
 rm -rf /root/install.log.syslog
 #Other clean==============================================================End
+
 
 
 %end

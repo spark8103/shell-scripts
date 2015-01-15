@@ -1,23 +1,24 @@
-lvcreate -n test-0-18 -L 50G /dev/vg
-koan --virt --server=10.100.0.10 --profile=virtual --virt-path=/dev/vg/test-0-18 --virt-name=test-0-18
+
+lvcreate -n test-0-06 -L 50G /dev/vg
+koan --virt --server=10.100.0.10 --profile=virtual --virt-path=/dev/vg/test-0-06 --virt-name=test-0-06
 
 
 
-lvcreate -n test-0-20 -L 100G /dev/vg
+lvcreate -n test-0-07 -L 100G /dev/vg
 virt-install --ram=4096 --vcpus=2 --os-type=linux --os-variant=rhel6 \
          --cdrom /home/ISOs/CentOS-7.0-1406-x86_64-Minimal.iso --network bridge=br0 \
          --disk path=/dev/vg/test-0-20 \
          --accelerate --vnc --vncport=5910 \
-         --noautoconsole --name=test-0-20
+         --noautoconsole --name=test-0-07
  
 
 
-lvcreate -n test-0-11 -L 100G /dev/vg
+lvcreate -n test-0-08 -L 100G /dev/vg
 virt-install --ram=4096 --vcpus=2 --os-type=linux --os-variant=rhel6 \
          --cdrom /home/ISOs/CentOS-6.6-x86_64-minimal.iso --network bridge=br0 \
-         --disk path=/dev/vg/test-0-11 \
+         --disk path=/dev/vg/test-0-08 \
          --accelerate --vnc --vncport=5903 \
-         --noautoconsole --name=test-0-11
+         --noautoconsole --name=test-0-08
 
 
 
