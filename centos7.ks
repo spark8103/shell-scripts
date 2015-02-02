@@ -1,7 +1,7 @@
-# Kickstart file for virtual server (CentOS 6.6 x86_64), Version 0.1
+# Kickstart file for virtual server (CentOS 7.0 x86_64), Version 0.1
 # General Install Section=================================================Begin
 install
-url --url=http://10.100.0.10/centos6_repo
+url --url=http://10.100.0.10/centos7_repo
 lang en_US.UTF-8
 keyboard us
 text
@@ -10,13 +10,14 @@ skipx
 
 
 # Localization Section====================================================Begin
-timezone --utc Asia/Shanghai
+#timezone --utc Asia/Shanghai
+timezone Asia/Shanghai --isUtc --nontp
 # Localization Section====================================================End
 
 
 # Network Configuration===================================================Begin
 #network --device eth0 --bootproto dhcp --hostname localhost.idc.pplive.cn --onboot=yes --noipv6
-network --onboot yes --device eth0 --mtu=1500 --bootproto static --ip 10.100.0.13 --netmask 255.255.255.0 --gateway 10.100.0.254 --noipv6 --hostname test-0-13.test.dalegames.com
+network --onboot yes --device eth0 --mtu=1500 --bootproto static --ip 10.100.0.21 --netmask 255.255.255.0 --gateway 10.100.0.254 --noipv6 --hostname test-0-21.test.dalegames.com
 # Network Configuration===================================================End
 
 
@@ -33,15 +34,16 @@ reboot --eject
 zerombr
 bootloader --location=mbr --driveorder=vda --append="crashkernel=auto rhgb quiet"
 clearpart --all --drives=vda --initlabel
-part /boot --fstype=ext4 --asprimary --size=500
-part / --fstype=ext4 --asprimary --size=30720
+part /boot --fstype=xfs --asprimary --size=500
+part / --fstype=xfs --asprimary --size=30720
 part swap --asprimary --size=4096
-part /home --fstype=ext4 --grow --asprimary --size=200
+part /home --fstype=xfs --grow --asprimary --size=200
 # Disk/Partitioning Section===============================================End
 
 
 # Package Section=========================================================Begin
-%packages --nobase
+%packages
+@core
 telnet
 wget
 vim
@@ -56,6 +58,8 @@ bind-utils
 mailx
 svn
 git
+net-tools
+iptables
 sysstat
 # Package Section=========================================================End
 %end
@@ -67,16 +71,16 @@ sysstat
 
 
 # Disable Needless Services===============================================Begin
-/sbin/chkconfig --level 0123456 auditd off
-/sbin/chkconfig --level 0123456 ip6tables off
-/sbin/chkconfig --level 0123456 iptables off
-/sbin/chkconfig --level 0123456 iscsi off
-/sbin/chkconfig --level 0123456 iscsid off
-/sbin/chkconfig --level 0123456 lvm2-monitor off
-/sbin/chkconfig --level 0123456 mdmonitor off
-/sbin/chkconfig --level 0123456 postfix off
-/sbin/chkconfig --level 0123456 netfs off
-/sbin/chkconfig --level 0123456 udev-post off
+#/sbin/chkconfig --level 0123456 auditd off
+#/sbin/chkconfig --level 0123456 ip6tables off
+#/sbin/chkconfig --level 0123456 iptables off
+#/sbin/chkconfig --level 0123456 iscsi off
+#/sbin/chkconfig --level 0123456 iscsid off
+#/sbin/chkconfig --level 0123456 lvm2-monitor off
+#/sbin/chkconfig --level 0123456 mdmonitor off
+#/sbin/chkconfig --level 0123456 postfix off
+#/sbin/chkconfig --level 0123456 netfs off
+#/sbin/chkconfig --level 0123456 udev-post off
 # Disable Needless Services===============================================End
 
 
@@ -95,8 +99,8 @@ EOF
          / /_/ /          / __  |          / /___         / /___
         /_____/          /_/  |_|         /_____/        /_____/
  
-Hostname: test-0-13.test.dalegames.com
-PHY Serv: ser4.test.dalegames.com
+Hostname: test-0-21.test.dalegames.com
+PHY Serv: ser3.test.dalegames.com
 EOF
 echo -e "Date of Deployment: `date +%F`" >> /etc/motd
 echo -e "" >> /etc/motd
@@ -125,7 +129,7 @@ baseurl=http://mirrors.aliyun.com/centos/$releasever/os/$basearch/
         http://mirrors.aliyuncs.com/centos/$releasever/os/$basearch/
 #mirrorlist=http://mirrorlist.centos.org/?release=$releasever&arch=$basearch&repo=os
 gpgcheck=1
-gpgkey=http://mirrors.aliyun.com/centos/RPM-GPG-KEY-CentOS-6
+gpgkey=http://mirrors.aliyun.com/centos/RPM-GPG-KEY-CentOS-7
  
 #released updates 
 [updates]
@@ -135,7 +139,7 @@ baseurl=http://mirrors.aliyun.com/centos/$releasever/updates/$basearch/
         http://mirrors.aliyuncs.com/centos/$releasever/updates/$basearch/
 #mirrorlist=http://mirrorlist.centos.org/?release=$releasever&arch=$basearch&repo=updates
 gpgcheck=1
-gpgkey=http://mirrors.aliyun.com/centos/RPM-GPG-KEY-CentOS-6
+gpgkey=http://mirrors.aliyun.com/centos/RPM-GPG-KEY-CentOS-7
  
 #additional packages that may be useful
 [extras]
@@ -145,7 +149,7 @@ baseurl=http://mirrors.aliyun.com/centos/$releasever/extras/$basearch/
         http://mirrors.aliyuncs.com/centos/$releasever/extras/$basearch/
 #mirrorlist=http://mirrorlist.centos.org/?release=$releasever&arch=$basearch&repo=extras
 gpgcheck=1
-gpgkey=http://mirrors.aliyun.com/centos/RPM-GPG-KEY-CentOS-6
+gpgkey=http://mirrors.aliyun.com/centos/RPM-GPG-KEY-CentOS-7
  
 #additional packages that extend functionality of existing packages
 [centosplus]
@@ -156,7 +160,7 @@ baseurl=http://mirrors.aliyun.com/centos/$releasever/centosplus/$basearch/
 #mirrorlist=http://mirrorlist.centos.org/?release=$releasever&arch=$basearch&repo=centosplus
 gpgcheck=1
 enabled=0
-gpgkey=http://mirrors.aliyun.com/centos/RPM-GPG-KEY-CentOS-6
+gpgkey=http://mirrors.aliyun.com/centos/RPM-GPG-KEY-CentOS-7
  
 #contrib - packages by Centos Users
 [contrib]
@@ -167,38 +171,38 @@ baseurl=http://mirrors.aliyun.com/centos/$releasever/contrib/$basearch/
 #mirrorlist=http://mirrorlist.centos.org/?release=$releasever&arch=$basearch&repo=contrib
 gpgcheck=1
 enabled=0
-gpgkey=http://mirrors.aliyun.com/centos/RPM-GPG-KEY-CentOS-6
+gpgkey=http://mirrors.aliyun.com/centos/RPM-GPG-KEY-CentOS-7
 EOF
 
 cat > /etc/yum.repos.d/epel.repo << "EOF"
 [epel]
-name=Extra Packages for Enterprise Linux 6 - $basearch
-baseurl=http://mirrors.aliyun.com/epel/6/$basearch
-        http://mirrors.aliyuncs.com/epel/6/$basearch
-#mirrorlist=https://mirrors.fedoraproject.org/metalink?repo=epel-6&arch=$basearch
+name=Extra Packages for Enterprise Linux 7 - $basearch
+baseurl=http://mirrors.aliyun.com/epel/7/$basearch
+        http://mirrors.aliyuncs.com/epel/7/$basearch
+#mirrorlist=https://mirrors.fedoraproject.org/metalink?repo=epel-7&arch=$basearch
 failovermethod=priority
 enabled=1
 gpgcheck=0
-gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-EPEL-6
+gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-EPEL-7
  
 [epel-debuginfo]
-name=Extra Packages for Enterprise Linux 6 - $basearch - Debug
-baseurl=http://mirrors.aliyun.com/epel/6/$basearch/debug
-        http://mirrors.aliyuncs.com/epel/6/$basearch/debug
-#mirrorlist=https://mirrors.fedoraproject.org/metalink?repo=epel-debug-6&arch=$basearch
+name=Extra Packages for Enterprise Linux 7 - $basearch - Debug
+baseurl=http://mirrors.aliyun.com/epel/7/$basearch/debug
+        http://mirrors.aliyuncs.com/epel/7/$basearch/debug
+#mirrorlist=https://mirrors.fedoraproject.org/metalink?repo=epel-debug-7&arch=$basearch
 failovermethod=priority
 enabled=0
-gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-EPEL-6
+gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-EPEL-7
 gpgcheck=0
  
 [epel-source]
-name=Extra Packages for Enterprise Linux 6 - $basearch - Source
-baseurl=http://mirrors.aliyun.com/epel/6/SRPMS
-        http://mirrors.aliyuncs.com/epel/6/SRPMS
-#mirrorlist=https://mirrors.fedoraproject.org/metalink?repo=epel-source-6&arch=$basearch
+name=Extra Packages for Enterprise Linux 7 - $basearch - Source
+baseurl=http://mirrors.aliyun.com/epel/7/SRPMS
+        http://mirrors.aliyuncs.com/epel/7/SRPMS
+#mirrorlist=https://mirrors.fedoraproject.org/metalink?repo=epel-source-7&arch=$basearch
 failovermethod=priority
 enabled=0
-gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-EPEL-6
+gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-EPEL-7
 gpgcheck=0
 EOF
 # YUM Configuration=======================================================End
@@ -289,7 +293,7 @@ sed -i '/*\/10/s/*\/10/*/' /etc/cron.d/sysstat
 #Changing search domain===================================================Begin
 cat > /etc/sysconfig/network << "EOF"
 NETWORKING=yes
-HOSTNAME=test-0-13.test.dalegames.com
+HOSTNAME=test-0-21.test.dalegames.com
 GATEWAY=10.100.0.254
 NOZEROCONF=yes
 EOF
@@ -337,7 +341,7 @@ DEVICE=eth0
 TYPE=Ethernet
 ONBOOT=yes
 BOOTPROTO=static
-IPADDR=10.100.0.13
+IPADDR=10.100.0.21
 PREFIX=24
 IPV6INIT=no
 EOF
