@@ -97,6 +97,7 @@ EOF
  
 Hostname: test-0-13.test.dalegames.com
 PHY Serv: ser4.test.dalegames.com
+
 EOF
 echo -e "Date of Deployment: `date +%F`" >> /etc/motd
 echo -e "" >> /etc/motd
